@@ -13,4 +13,4 @@ Then install the redcarpet gem.
 `$ gem install redcarpet`
 
 ## Usage
-`$ markdwn /path/to/file.md`
+`$ markdown /path/to/file.md`
