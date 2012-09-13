@@ -10,6 +10,9 @@ md_ext = {
   :superscript => true, :space_after_headers => true
 }
 
+# Abort if no argument passed.
+abort("Usage: markdown <file.md>") unless ARGV[0]
+
 # Set path if file exists (or abort)
 abort("File does not exist") unless File.exist?(ARGV[0])
 path = ARGV[0]
