@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'redcarpet'
+require 'tempfile'
+
+# Settings (Change this to suit your needs)
+md_render =  Redcarpet::Render::XHTML
+md_ext = {
+  :no_intra_emphasis => true, :fenced_code_blocks => true,
+  :superscript => true, :space_after_headers => true
+}
+
+# Set path if file exists (or abort)
+abort("File does not exist") unless File.exist?(ARGV[0])
+path = ARGV[0]
+
+# Render markdown
+markdown = Redcarpet::Markdown.new(md_render, md_ext)
+rendered = markdown.render(File.read(path))
+
+# Write to /tmp/
+tmp_path = '/tmp/' + path.split('/')[-1].split('.')[0] + '.html'
+
+f = File.new(tmp_path, 'w+')
+f.write(rendered)
+f.close
+
+# Set browser
+browser = ENV['BROWSER'] ? ENV['BROWSER'] : 'xdg-open'
+`#{browser} #{tmp_path} >/dev/null 2>&1`
