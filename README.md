@@ -17,3 +17,6 @@ You also need to make sure the script is executable.
 
 Then you should be all set.    
 `$ markdown /path/to/file.md`
+
+If you wish to save the rendered HTML in a specific location (default is /tmp/)
+`$ markdown /path/to/file.md /path/to/file.html`
