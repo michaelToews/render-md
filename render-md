@@ -22,20 +22,18 @@ markdown = Redcarpet::Markdown.new(md_render, md_ext)
 rendered = markdown.render(File.read(path))
 
 # Write to html path
-html_path = ARGV[1]
-if html_path != nil
-  if html_path[-5..-1] == ".html"
-    html_path = html_path
-  elsif html_path[-1] == "/"
-    html_path = html_path + path.split('/')[-1].split('.')[0] + '.html' 
+tmp_path = '/tmp/' + path.split('/')[-1].split('.')[0] + '.html'
+html_path = ARGV[1] ? ARGV[1] : tmp_path
+
+if html_path != tmp_path && html_path[-5..-1] != '.html'
+  if Dir.directory?(html_path)
+    html_path += path.split('/')[-1].split('.')[0] + '.html' 
   else
-    html_path = html_path + '/' + path.split('/')[-1].split('.')[0] + '.html'
+    html_path += '/' + path.split('/')[-1].split('.')[0] + '.html'
   end
-else
-  html_path = '/tmp/' + path.split('/')[-1].split('.')[0] + '.html'
 end
 
-f = File.new(html_path, 'w+')
+f = File.new(html_path, 'w')
 f.write(rendered)
 f.close
 
