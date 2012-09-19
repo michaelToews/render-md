@@ -45,7 +45,7 @@ if File.exist?(html_path)
 end
 
 if overwrite || !File.exist?(html_path)
-  File.new(html_path, 'w') { | f | f.write(rendered) }
+  File.open(html_path, 'w') { | f | f.write(rendered) }
 
   `#{browser} #{html_path} >/dev/null 2>&1`
 end
