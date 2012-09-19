@@ -4,11 +4,14 @@ require 'redcarpet'
 require 'tempfile'
 
 # Settings (Change this to suit your needs)
+browser = ENV['BROWSER'] ? ENV['BROWSER'] : 'xdg-open'
 md_render =  Redcarpet::Render::XHTML
 md_ext = {
   :no_intra_emphasis => true, :fenced_code_blocks => true,
   :superscript => true, :space_after_headers => true
 }
+
+overwrite = false
 
 # Abort if no argument passed.
 abort("Usage: markdown <file.md>") unless ARGV[0]
@@ -26,17 +29,22 @@ tmp_path = '/tmp/' + path.split('/')[-1].split('.')[0] + '.html'
 html_path = ARGV[1] ? ARGV[1] : tmp_path
 
 if html_path != tmp_path && html_path[-5..-1] != '.html'
-  if Dir.directory?(html_path)
+  if File.directory?(html_path)
+    html_path += '/' if html_path[-1] != '/'
     html_path += path.split('/')[-1].split('.')[0] + '.html' 
   else
     html_path += '/' + path.split('/')[-1].split('.')[0] + '.html'
   end
 end
 
-f = File.new(html_path, 'w')
-f.write(rendered)
-f.close
+if File.exist?(html_path)
+  print "That file exists. Overwrite? [y/n]"
+  overwrite = $stdin.gets.chomp
+  overwrite = true if overwrite[0] == default
+end
 
-# Set browser
-browser = ENV['BROWSER'] ? ENV['BROWSER'] : 'xdg-open'
-`#{browser} #{html_path} >/dev/null 2>&1`
+if overwrite || !File.exist?(html_path)
+  f = File.new(html_path, 'w'); f.write(rendered); f.close
+
+  `#{browser} #{html_path} >/dev/null 2>&1`
+end
