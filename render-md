@@ -11,6 +11,7 @@ md_ext = {
   :superscript => true, :space_after_headers => true
 }
 
+default = 'y'
 overwrite = false
 
 # Abort if no argument passed.
